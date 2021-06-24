@@ -1,5 +1,9 @@
 # la_funding_analysis
 
+## Project overview
+
+This project aims to analyse and visualise the local authorities receiving grants to improve household energy efficiency from two different funding programmes. Full details are given in the notebook within outputs/reports.
+
 ## Setup
 
 - Meet the data science cookiecutter [requirements](http://nestauk.github.io/ds-cookiecutter/quickstart), in brief:
