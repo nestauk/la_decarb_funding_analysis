@@ -4,7 +4,7 @@
 
 import matplotlib.pyplot as plt
 
-from la_funding_analysis.pipeline.cleaning_and_joining import info_sp
+from la_funding_analysis.pipeline.cleaning_and_joining import form_full_dataset
 from la_funding_analysis.utils.plotters import (
     jitter,
     strip_plot,
@@ -12,10 +12,11 @@ from la_funding_analysis.utils.plotters import (
     stacked_plot,
 )
 
+la_data = form_full_dataset()
 
 # Region proportions
 proportion_plot(
-    data=info_sp,
+    data=la_data,
     category="region_1",
     graph_ylabel="Region",
     graph_title="Proportions of local authorities in each region\n receiving each number of grants\n (individual authorities and consortium leads only)",
@@ -24,7 +25,7 @@ proportion_plot(
 
 # Party proportions
 proportion_plot(
-    data=info_sp,
+    data=la_data,
     category="majority",
     graph_ylabel="Majority party",
     graph_title="Proportions of local authorities with each majority party\n receiving each number of grants",
@@ -33,7 +34,7 @@ proportion_plot(
 
 # Model proportions
 proportion_plot(
-    data=info_sp,
+    data=la_data,
     category="model",
     graph_ylabel="Local authority model",
     graph_title="Proportions of local authorities with each model\n receiving each number of grants",
@@ -42,7 +43,7 @@ proportion_plot(
 
 # Majority party plot by grant type
 stacked_plot(
-    data=info_sp,
+    data=la_data,
     factor="majority",
     graph_ylabel="Majority party",
     graph_title="Number of grants by majority party for each funding scheme",
@@ -51,7 +52,7 @@ stacked_plot(
 
 # LA type by grant
 stacked_plot(
-    data=info_sp,
+    data=la_data,
     factor="model",
     graph_ylabel="Local authority model",
     graph_title="Number of grants by local authority model\n for each funding scheme",
@@ -60,10 +61,10 @@ stacked_plot(
 
 
 # Filter to regions without subregions
-info_sp_lowest_regions = info_sp[~info_sp["subregions"]]
+la_data_lowest_regions = la_data[~la_data["subregions"]]
 
 # Plot by region, ignoring consortium members
-no_members = info_sp_lowest_regions[
+no_members = la_data_lowest_regions[
     ["region_1", "GHG_1a_LADS", "GHG_1a_leads", "GHG_1b_LADS", "GHG_1b_leads", "SHDF"]
 ]
 no_members["GHG 1a"] = no_members["GHG_1a_LADS"] + no_members["GHG_1a_leads"]
@@ -94,7 +95,7 @@ plt.close()
 
 # FP plot
 strip_plot(
-    data=info_sp_lowest_regions,
+    data=la_data_lowest_regions,
     value="fp_proportion",
     ymin=0,
     ymax=25,
@@ -104,12 +105,12 @@ strip_plot(
 )
 
 # Fuel poverty proportion vs SHDF yes/no, West Mids and London shown
-info_sp_lr_filtered = info_sp_lowest_regions[
-    ~info_sp_lowest_regions["fp_proportion"].isna()
+la_data_lr_filtered = la_data_lowest_regions[
+    ~la_data_lowest_regions["fp_proportion"].isna()
 ]
-west_mids = info_sp_lr_filtered[info_sp_lr_filtered["region_1"] == "West Midlands"]
-london = info_sp_lr_filtered[info_sp_lr_filtered["region_1"] == "London"]
-non_wm_lon = info_sp_lr_filtered.drop(west_mids.index).drop(london.index)
+west_mids = la_data_lr_filtered[la_data_lr_filtered["region_1"] == "West Midlands"]
+london = la_data_lr_filtered[la_data_lr_filtered["region_1"] == "London"]
+non_wm_lon = la_data_lr_filtered.drop(west_mids.index).drop(london.index)
 
 plt.clf()
 fig, ax = plt.subplots()
@@ -142,7 +143,7 @@ plt.savefig("outputs/figures/fp_westmids_london.png")
 
 # IMD plot
 strip_plot(
-    data=info_sp_lowest_regions,
+    data=la_data_lowest_regions,
     value="imd_concentration",
     ymin=10000,
     ymax=35000,
@@ -153,7 +154,7 @@ strip_plot(
 
 # EPC plot
 strip_plot(
-    data=info_sp_lowest_regions,
+    data=la_data_lowest_regions,
     value="mean_energy_efficiency",
     ymin=54,
     ymax=70,
@@ -166,12 +167,12 @@ strip_plot(
 # Improvable social housing plots
 
 # Filter to England only
-info_sp_eng = info_sp[info_sp["region_1"] != "Scotland"]
+la_data_eng = la_data[la_data["region_1"] != "Scotland"]
 
 # Separate "high improvability, low grants" points
 # so they can be shown in a different colour
-big = info_sp_eng[(info_sp_eng["SHDF"] == 0) & (info_sp_eng["improvable"] > 20000)]
-small = info_sp_eng.drop(big.index)
+big = la_data_eng[(la_data_eng["SHDF"] == 0) & (la_data_eng["improvable"] > 20000)]
+small = la_data_eng.drop(big.index)
 big = big.reset_index()
 
 # Number of improvable socially rented homes vs SHDF yes/no
