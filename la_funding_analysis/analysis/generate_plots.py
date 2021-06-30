@@ -4,6 +4,7 @@
 
 import matplotlib.pyplot as plt
 
+from la_funding_analysis import PROJECT_DIR
 from la_funding_analysis.pipeline.cleaning_and_joining import form_full_dataset
 from la_funding_analysis.utils.plotters import (
     jitter,
