@@ -51,9 +51,6 @@ def clean_names(name) -> str:
     return name
 
 
-# print(clean_names('Test District'))
-
-
 def model_type(code):
     # Function taking local authority model codes
     # and returning a description of the model.
