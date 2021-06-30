@@ -21,7 +21,7 @@ proportion_plot(
     category="region_1",
     graph_ylabel="Region",
     graph_title="Proportions of local authorities in each region\n receiving each number of grants\n (individual authorities and consortium leads only)",
-    filename="outputs/figures/region_props.png",
+    filename=PROJECT_DIR / "outputs/figures/region_props.png",
 )
 
 # Party proportions
