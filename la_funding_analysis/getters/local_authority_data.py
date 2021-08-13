@@ -57,7 +57,7 @@ def get_grants():
 
 
 def get_epc():
-    # Fetches EPC data. Quite big so takes a few seconds.
+    # Fetches English LA EPC data. Quite big so takes a few seconds.
     epc = pd.read_csv(PROJECT_DIR / "inputs/data/epc.csv").drop(columns="Unnamed: 0")
     #
     return epc

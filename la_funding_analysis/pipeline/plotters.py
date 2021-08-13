@@ -145,12 +145,14 @@ def dual_bar_by_applicant_type(data, factor, graph_ylabel, graph_title, filename
 
 
 def boxplot_by_receipt_status(data, factor, graph_ylabel, graph_title, filename):
+    """Plots a boxplot of LA factor according to whether or not they
+    received at least one grant of any type.
+    """
     data["received_grant"] = data["total_grants"] >= 1
     data["Received at least one grant"] = "No"
     data["Received at least one grant"][data["received_grant"]] = "Yes"
     fig, ax = plt.subplots()
     data.boxplot(factor, by="Received at least one grant")
-    # plt.ylim([45,75])
     plt.suptitle("")
     plt.title(graph_title)
     plt.ylabel(graph_ylabel)
@@ -158,16 +160,27 @@ def boxplot_by_receipt_status(data, factor, graph_ylabel, graph_title, filename)
     plt.savefig(PROJECT_DIR / "outputs/figures" / filename)
 
 
-# STRIP PLOTS
+# STRIP PLOTS (scatter plots with a discrete x axis and
+# some random jitter along the x axis)
 
 
 def set_up_strip_plot_axes(axes, ymin, ymax, graph_ylabel, graph_title, type="ngrants"):
+    """Sets up axes for the strip plots that follow.
+    Two plots are used - 'ngrants' (number of grants)
+    which plots a particular factor against the total
+    number of grants received by a LA, and 'yesno'
+    which plots the factor against whether or not
+    they specifically received the SHDDF.
+    """
     axes.grid(axis="y", color="#d3d3d3", zorder=0)
     if type == "ngrants":
+        # Number of grants ranges from 0 to 4 so limits extend
+        # slightly beyond this
         xmin = -0.5
         xmax = 4.5
         graph_xlabel = "Number of grants"
     if type == "yesno":
+        # Slight extension of the [0, 1] interval
         xmin = -0.4
         xmax = 1.4
         graph_xlabel = "Received SHDDF"
@@ -183,6 +196,9 @@ def set_up_strip_plot_axes(axes, ymin, ymax, graph_ylabel, graph_title, type="ng
 
 
 def imd_strip_plot(data, filename):
+    """Strip plot of number of grants received by a LA
+    against the number of grants it received.
+    """
     fig, ax = plt.subplots()
     set_up_strip_plot_axes(
         axes=ax,
@@ -204,6 +220,15 @@ def imd_strip_plot(data, filename):
 
 
 def fp_clusters_strip_plot(data, filename):
+    """Strip plot of LA fuel poverty against the
+    number of grants it received.
+    Certain clusters of points are coloured differently
+    for ease of reference in the report - the top left
+    cluster consists of LAs which received no grants but
+    have high fuel poverty, and the middle right cluster
+    consists of LAs which received 3 grants but have
+    relatively low fuel poverty.
+    """
     data_notna = data[~data["fp_proportion"].isna()]
     #
     tl_cond1 = data_notna["total_grants"] == 0
@@ -241,6 +266,10 @@ def fp_clusters_strip_plot(data, filename):
 
 
 def westmids_london_fp_strip_plot(data, filename):
+    """Strip plot of LA fuel poverty against number of grants
+    (same as above) but this time points are coloured according
+    to their region - West Midlands, London or other.
+    """
     data_notna = data[~data["fp_proportion"].isna()]
     #
     wm_data = data_notna[data_notna["region_1"] == "West Midlands"]
@@ -270,7 +299,13 @@ def westmids_london_fp_strip_plot(data, filename):
 
 
 def improvable_strip_plot(data, factor, filename):
-    # Count/prop of socially rented homes that are improvable vs SHDF yes/no
+    """Plots counts/proportions of 'improvable' EPCs against whether
+    or not the LA received SHDDF.
+    An 'improvable' socially rented dwelling is one that is currently
+    EPC D or below but has the potential to be C or above.
+    This is interesting to consider as the stated aim of the SHDDF
+    was to improve the energy efficiency of social housing.
+    """
     data_notna = data[~data[factor].isna()]
     fig, ax = plt.subplots()
     #
