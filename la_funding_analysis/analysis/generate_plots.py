@@ -87,12 +87,13 @@ fp_clusters_strip_plot(data=la_data, filename="final_strip_fp.svg")
 
 westmids_london_fp_strip_plot(data=la_data, filename="final_strip_fp_regions.svg")
 
-
-# Improvable vs SHDF
+# Number of improvable vs SHDDF
 
 improvable_strip_plot(
     data=la_data, factor="total_improvable", filename="final_strip_improvable_count.svg"
 )
+
+# Proportion of improvable vs SHDDF
 
 improvable_strip_plot(
     data=la_data, factor="prop_improvable", filename="final_strip_improvable_prop.svg"
