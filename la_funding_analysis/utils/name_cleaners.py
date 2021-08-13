@@ -6,6 +6,7 @@ and make plots more readable.
 
 import numpy as np
 import pandas as pd
+from titlecase import titlecase
 
 
 def clean_names(name) -> str:
@@ -36,22 +37,34 @@ def clean_names(name) -> str:
     name = name.replace("\xa0", " ")
     for string in strings:
         name = name.replace(string, "")
-    name = (
-        name.replace("&", "and")
-        .replace("Mid-", "Mid ")
-        .replace("Upon", "upon")
-        .replace("Kings Lynn", "King's Lynn")
-        .replace("King’s Lynn", "King's Lynn")
-        .replace("Basingstoke and Deane", "Basingstoke and Dean")
-        .replace("St Helens", "St. Helens")
-        .replace("Vale of Whitehorse", "Vale of White Horse")
-        .replace("Newcastle upon Tyne", "Newcastle")
-        .strip()
-    )
+    #
+    replacements_dict = {
+        "&": "and",
+        "Mid-": "Mid ",
+        "Upon": "upon",
+        "Kings Lynn": "King's Lynn",
+        "King’s Lynn": "King's Lynn",
+        "Basingstoke and Deane": "Basingstoke and Dean",
+        "St Helens": "St. Helens",
+        "Vale of Whitehorse": "Vale of White Horse",
+        "Newcastle upon Tyne": "Newcastle",
+    }
+    #
+    for key, value in replacements_dict.items():
+        name = name.replace(key, value)
+    #
+    name = name.strip()
+    #
     return name
 
 
-# print(clean_names('Test District'))
+def strip_and_titlecase(name):
+    # Function removing trailing spaces and making strings titlecase,
+    # used for cleaning region name data
+    if name is np.nan:
+        return np.nan
+    else:
+        return titlecase(name.strip())
 
 
 def model_type(code):
@@ -61,8 +74,8 @@ def model_type(code):
         "U": "Unitary",
         "C": "County",
         "D": "District",
-        "M": "Metropolitan",
-        "L": "London",
+        "M": "Metropolitan borough",
+        "L": "London borough",
         "S": "Scottish",
         "W": "Welsh",
         "N": "Northern Irish",
@@ -72,6 +85,3 @@ def model_type(code):
     else:
         full_type = model_dict[code[0]]
     return full_type
-
-
-# print(model_type('L3'))
