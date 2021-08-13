@@ -1,8 +1,41 @@
-# la_funding_analysis
+# la_decarb_funding_analysis
 
 ## Project overview
 
-This project aims to analyse and visualise the local authorities receiving grants to improve household energy efficiency from two different funding programmes. Full details are given in the notebook within outputs/reports.
+This project aims to analyse and visualise the local authorities receiving household decarbonisation grants from two different funding programmes: the [Green Homes Grant Local Authority Delivery scheme](https://www.gov.uk/government/publications/green-homes-grant-local-authority-delivery-successful-local-authorities) and the [Social Housing Decarbonisation Fund Demonstrator](https://www.gov.uk/government/publications/social-housing-decarbonisation-fund-demonstrator-successful-bids). Local authority statistics are visualised alongside data about the number of grants they received, with the aim of identifying whether there are relationships between these different factors.
+
+Several datasets are combined to form one large dataset with a row for each local authority. LA statistics include
+
+- majority political party
+- LA type (e.g. county, district, etc.)
+- fuel poverty rate
+- IMD local concentration
+- median domestic energy efficiency rating
+- number of EPCs corresponding to "improvable" social housing, i.e. socially rented homes that are currently EPC D or below and have the potential to be C or above
+- grants received
+
+The output of the project is a series of plots to feed into a report, which can be found [here](https://docs.google.com/document/d/1_X0-EWCxSwjH-ALmC_dlo3mm5i5Ieg4aH443y1Xb1yM/edit?usp=sharing).
+
+## Project structure
+
+- getters
+  - local_authority_data_py
+    - Functions to import individual datasets from inputs/data.
+- utils
+  - name_cleaners.py
+    - Functions used for cleaning of particular data.
+- pipeline
+  - cleaning.py
+    - Functions to clean the imported datasets.
+  - joining.py
+    - Functions to join all of the individual datasets into one larger dataset.
+  - jitter_functions.py
+    - Custom plotting functions.
+  - plotters.py
+    - Where the bulk of the plotting code lives.
+- analysis
+  - generate_plots.py
+    - Runs the plotting functions and saves the results in outputs/figures.
 
 ## Setup
 
