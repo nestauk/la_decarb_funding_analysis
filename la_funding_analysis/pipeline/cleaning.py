@@ -1,5 +1,6 @@
 # File: pipeline/cleaning.py
 """Functions to clean datasets.
+Calling each function returns a clean version of the associated dataset.
 """
 
 import numpy as np

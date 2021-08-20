@@ -25,7 +25,7 @@ The output of the project is a series of plots to feed into a report, which can 
     - Functions to import individual datasets from inputs/data (stored in AWS).
 - utils
   - name_cleaners.py
-    - Functions used for cleaning of particular data.
+    - Utility functions to clean local authority names and types.
 - pipeline
   - cleaning.py
     - Functions to clean the imported datasets.

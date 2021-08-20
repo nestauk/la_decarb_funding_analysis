@@ -10,8 +10,9 @@ from titlecase import titlecase
 
 
 def clean_names(name) -> str:
-    # Function to clean local authority names in various datasets
-    # in order to join data from different sources.
+    """Function to clean local authority names in various datasets
+    in order to join data from different sources.
+    """
     strings = [
         " Metropolitan Borough Council",
         " Metropolitan District Council",
@@ -59,8 +60,9 @@ def clean_names(name) -> str:
 
 
 def strip_and_titlecase(name):
-    # Function removing trailing spaces and making strings titlecase,
-    # used for cleaning region name data
+    """Function removing trailing spaces and making strings titlecase,
+    used for cleaning region name data
+    """
     if name is np.nan:
         return np.nan
     else:
@@ -68,8 +70,9 @@ def strip_and_titlecase(name):
 
 
 def model_type(code):
-    # Function taking local authority model codes
-    # and returning a description of the model.
+    """Function taking local authority model codes
+    and returning a description of the model.
+    """
     model_dict = {
         "U": "Unitary",
         "C": "County",

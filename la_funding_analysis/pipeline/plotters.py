@@ -48,10 +48,11 @@ def stacked_no_members_by_grant_type(data, factor, graph_ylabel, graph_title, fi
 
 
 def proportion_by_number_of_grants(data, factor, graph_ylabel, graph_title, filename):
-    # Function to plot a bar graph in which bars are
-    # scaled to the number of LAs in the chosen factor.
-    # Bars are coloured according to the number of LAs
-    # receiving each number of grants.
+    """Function to plot a bar graph in which bars are
+    scaled to the number of LAs in the chosen factor.
+    Bars are coloured according to the number of LAs
+    receiving each number of grants.
+    """
     data = data[~data[factor].isna()]
     la_counts = data.groupby(factor).count()["code"]
     num_factors = len(set(data[factor]))
@@ -230,6 +231,10 @@ def fp_clusters_strip_plot(data, filename):
     relatively low fuel poverty.
     """
     data_notna = data[~data["fp_proportion"].isna()]
+    #
+    # Define conditions for the 'top left' and 'middle right' clusters
+    # then separate these out so they can be plotted in different colours
+    # Numbers used in conditions were determined by inspection of the plot
     #
     tl_cond1 = data_notna["total_grants"] == 0
     tl_cond2 = data_notna["fp_proportion"] > 20
