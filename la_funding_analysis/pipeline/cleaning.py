@@ -4,11 +4,13 @@ Calling each function returns a clean version of the associated dataset.
 """
 
 import numpy as np
+import pandas as pd
 
 from la_funding_analysis.getters.local_authority_data import (
     get_epc,
     get_grants,
     get_imd,
+    get_old_parties,
     get_parties_models,
     get_fuel_poverty,
 )
@@ -70,16 +72,48 @@ def get_clean_fuel_poverty():
         return ("(Met County)" in string) | (string in ["Inner London", "Outer London"])
 
     #
+    #
     not_las = [not_la_condition(string) for string in fuel_poverty["region_2"]]
     no_region_3 = list(fuel_poverty.region_3.isna())
     both = [a and b for a, b in zip(not_las, no_region_3)]
     fuel_poverty = fuel_poverty.drop(fuel_poverty[both].index)
     #
+    # Append rows for Greater London Authority and
+    # Greater Manchester Combined Authority -
+    # these are not LAs but some grants went to them
+    combined_authorities = pd.DataFrame(
+        [
+            [
+                np.nan,
+                "London",
+                "Greater London Authority",
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+                "Greater London Authority",
+            ],
+            [
+                np.nan,
+                "North West",
+                "Greater Manchester Combined Authority",
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+                "Greater Manchester Combined Authority",
+            ],
+        ],
+        columns=fuel_poverty.columns,
+    )
+    #
+    fuel_poverty = fuel_poverty.append(combined_authorities, ignore_index=True)
+    #
     return fuel_poverty
 
 
 def get_clean_parties_models():
-    """Gets and cleans LA majority party and model (e.g. county, district) data."""
+    """Gets and cleans current LA majority party and model (e.g. county, district) data."""
     parties_models = get_parties_models()
     #
     parties_models = parties_models.rename(
@@ -101,6 +135,15 @@ def get_clean_parties_models():
     parties_models = parties_models.drop(columns="name")
     #
     return parties_models
+
+
+def get_clean_old_parties():
+    """Gets and cleans data about political majorities as of August 2020."""
+    op = get_old_parties()
+    op["clean_name"] = op["Authority"].apply(clean_names)
+    op["old_majority"] = [string.upper() for string in op["Control"]]
+    op = op.drop(columns=["Authority", "Control"]).reset_index(drop=True)
+    return op
 
 
 def get_clean_imd():

@@ -9,7 +9,7 @@ import pandas as pd
 from titlecase import titlecase
 
 
-def clean_names(name) -> str:
+def clean_names(name):
     """Function to clean local authority names in various datasets
     in order to join data from different sources.
     """
@@ -27,8 +27,10 @@ def clean_names(name) -> str:
         "Council",
         "Corporation",
         ", City of",
+        ", City Of",
         "City of ",
         ", County of",
+        ", County Of",
         "County UA",
         "County ",
         " (Met County)",
@@ -49,6 +51,8 @@ def clean_names(name) -> str:
         "St Helens": "St. Helens",
         "Vale of Whitehorse": "Vale of White Horse",
         "Newcastle upon Tyne": "Newcastle",
+        "Newcastle-Under-Lyme": "Newcastle-under-Lyme",
+        "Blackburn With Darwen": "Blackburn with Darwen",
     }
     #
     for key, value in replacements_dict.items():

@@ -22,12 +22,26 @@ def get_fuel_poverty():
 
 def get_parties_models():
     """Fetches data about LA model types (i.e. county, district etc.)
+    and majority political parties as of August 2021.
     Source: http://opencouncildata.co.uk/csv1.php
     """
     parties_models = pd.read_csv(
         PROJECT_DIR / "inputs/data/opencouncildata_councils.csv", usecols=[1, 2, 5]
     )
     return parties_models
+
+
+def get_old_parties():
+    """Fetches data about LA majority parties as of 2019.
+    Source: http://opencouncildata.co.uk/downloads.php
+    """
+    old_parties = pd.read_csv(
+        PROJECT_DIR / "inputs/data/history1973-2019.csv", usecols=[0, 3, 10]
+    )
+    #
+    old_parties = old_parties.loc[old_parties["Year"] == 2019].drop(columns="Year")
+    #
+    return old_parties
 
 
 def get_imd():

@@ -54,6 +54,7 @@ def proportion_by_number_of_grants(data, factor, graph_ylabel, graph_title, file
     receiving each number of grants.
     """
     data = data[~data[factor].isna()]
+    # Count codes to ensure non-LAs are excluded
     la_counts = data.groupby(factor).count()["code"]
     num_factors = len(set(data[factor]))
     #

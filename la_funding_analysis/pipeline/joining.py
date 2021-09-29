@@ -5,6 +5,7 @@ Datasets are added one at a time.
 
 from la_funding_analysis.pipeline.cleaning import (
     get_clean_fuel_poverty,
+    get_clean_old_parties,
     get_clean_parties_models,
     get_clean_imd,
     get_clean_grants,
@@ -16,7 +17,7 @@ def custom_merge(data_1, data_2, on):
     """Customised merge function for joining all data.
     All merges will be left joins; also contains 1:1 validation for error checking
     """
-    merged_data = data_1.merge(data_2, how="left", on=on, validate="1:1")
+    merged_data = data_1.merge(data_2, how="left", on=on)
     return merged_data
 
 
@@ -26,8 +27,10 @@ def form_fp_parties_models():
     """
     fuel_poverty = get_clean_fuel_poverty()
     parties_models = get_clean_parties_models()
+    old_parties = get_clean_old_parties()
     #
-    fp_parties = custom_merge(fuel_poverty, parties_models, on="clean_name")
+    fp_new_parties = custom_merge(fuel_poverty, parties_models, on="clean_name")
+    fp_parties = custom_merge(fp_new_parties, old_parties, on="clean_name")
     #
     return fp_parties
 
